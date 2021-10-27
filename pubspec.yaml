@@ -52,7 +52,6 @@ flutter:
     - assets/
     - assets/bundle.js
     - assets/index.html
-    - assets/index.js
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

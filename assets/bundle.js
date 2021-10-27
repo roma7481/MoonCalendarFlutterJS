@@ -323,13 +323,8 @@ const day = '30-07-2021'
 const year = 2019
 const timezone = 'Asia/Novosibirsk';
 
-console.log("====== LUNAR DAYS FOR ONE DAY ========");
-console.log(lunarDays(day, latitude, longitude, timezone));
-
-console.log("====== LNAR DAYS FOR ENTIRE YEAR ========");
-console.log(allLunarDaysInYear(year, latitude, longitude, timezone));
-
 module.exports = lunarDays
+module.exports = allLunarDaysInYear
 
 
 
@@ -35845,9 +35840,14 @@ else window.SunCalc = SunCalc;
 (function (global){(function (){
 var mylib = require("./index")
 if (typeof global.window.define == 'function' && global.window.define.amd){
-global.window.define('lunarDays', function() {return mylib})
+    global.window.define('lunarDays', function() {return mylib})
 } else {
-global.window.lunarDays = mylib
+    global.window.lunarDays = mylib
+}
+if (typeof global.window.define == 'function' && global.window.define.amd){
+    global.window.define('allLunarDaysInYear', function() {return mylib})
+} else {
+    global.window.allLunarDaysInYear = mylib
 }
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./index":1}],79:[function(require,module,exports){
