@@ -49,6 +49,7 @@ class _WebViewPlusExampleMainPageState
               onPageFinished: (url) {
                 var day = "\'30-07-2021\'";
                 var year = "\'2019\'";
+                var month = "\'2\'";
                 var latitude = 50.7086074;
                 var longitude = 30.216038;
                 var timezone = "\'Asia/Novosibirsk\'";
@@ -69,9 +70,8 @@ class _WebViewPlusExampleMainPageState
                     }
                 });
 
-
                 String allLunarDaysInYearScript =
-                    "allLunarDayInYearConverter(allLunarDaysInYear($year, $latitude, $longitude, $timezone))";
+                    "allLunarDayInMonthConverter(allLunarDaysInMonth($month, $year, $latitude, $longitude, $timezone))";
 
                 _controller.webViewController
                     .evaluateJavascript(allLunarDaysInYearScript)

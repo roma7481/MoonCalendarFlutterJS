@@ -47,47 +47,6 @@ var getDaysArray = function(start, end) {
   return arr;
 };
 
-
-const getYearLoonarDays = function(){
-  var daylist = getDaysArray(new Date("2018-05-01"),new Date("2018-05-06"));
-
-  var res = []
-
-  for (i = 0; i < daylist.length; i ++ ) {
-    // var formatedDate = moment(daylist[i]).tz(moment.tz.guess()).format('DD-MM-YYYY')
-    var formatedDate = moment.tz(daylist[i], 'DD-MM-YYYY', 'Asia/Vladivostok');
-    // console.log(formatedDate)
-    // var date = moment.tz('11-06-2021', 'DD-MM-YYYY', moment.tz.guess());
-    // console.log(date)
-    lunarDays(formatedDate,latitude, longitude)
-    // res.push(lunarDays(date,latitude, longitude))
-  }
-  // console.log(res)
-}
-
-// const lunarDays = function(date, latitude, longitude){
-//   var res = getlunarDaysInternal(date, latitude, longitude);
-//   var resPrev = getPrevlunarDaysInternal(date, latitude, longitude);
-
-//   // return getMissingDays(res,resPrev);
-//   return getFormattedDays(getMissingDays(res,resPrev,date))
-// }
-
-// const getFormattedDays = function(res){
-//   var formattedDays = []
-   
-//   for (let i = 0; i < res.length; i++) {
-//     formattedDays.push({
-//       // +2 because we started from 2 day
-//       number: res[i].number,
-//       start: res[i].start.valueOf(),
-//       end: res[i].end.valueOf()
-//     });
-//   }
-
-//   return formattedDays;
-// }
-
 const lunarDays = function(date, latitude, longitude, timezone){
   var date = moment.tz(date, 'DD-MM-YYYY', timezone);
 
@@ -229,50 +188,6 @@ const formatDate = function(date) {
   date.getFullYear();
 }
 
-//VLADIVOSTOK
-// const latitude = 43.133248
-// const longitude = 131.911298
-
-//MOSCOW
-// const latitude = 55.755826
-// const longitude = 37.617300
-
-//UFA
-// const latitude = 54.73479099999999
-// const longitude = 55.9578555
-
-//SHAHTY
-//const latitude =  47.7086074
-//const longitude = 40.216038
-
-//VLADIVOSTOK
-// var date = moment.tz('11-06-2021', 'DD-MM-YYYY', 'Asia/Vladivostok');
-// var date = moment.tz('07-09-2021', 'DD-MM-YYYY', 'Asia/Vladivostok');
-// var date = moment.tz('13-12-2021', 'DD-MM-YYYY', 'Asia/Vladivostok');
-// var date = moment.tz('09-07-2021', 'DD-MM-YYYY', 'Asia/Vladivostok');
-// var date = moment.tz('15-05-2021', 'DD-MM-YYYY', 'Asia/Vladivostok');
-
-//UFA
-// var date = moment.tz('07-09-2021', 'DD-MM-YYYY', 'Asia/Yekaterinburg');
-
-//MOSCOW
-// var date = moment.tz('10-06-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('21-12-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('06-12-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('08-09-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('10-08-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('10-06-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('04-12-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('04-11-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-// var date = moment.tz('07-09-2021', 'DD-MM-YYYY', 'Europe/Moscow');
-
-
-
-
-
-
-////////// NEW ////////////////
-
 const allDaysInYear = (currentYear) => {
   var start = new Date(currentYear, 0, 1),
         end = new Date(currentYear, 11, 31),
@@ -287,17 +202,12 @@ const allDaysInYear = (currentYear) => {
     return datesBetween;
 }
 
-// const allLunarDaysInYear = (currentYear,timezone) => {
-//   var allYearDates = allDaysInYear(currentYear),
-//       lunarDates = []
-//     ;
-
-//   for (date of allYearDates){
-//     lunarDates.push(date,lunarDays(moment.tz(date, 'DD-MM-YYYY', timezone), latitude, longitude));
-//   }
-
-//   return lunarDates;
-// }
+/**
+ * @param {int} The month number, 0 based
+ * @param {int} The year, not zero based, required to account for leap years
+ * @return {Date[]} List with date objects for each day of the month
+ */
+ const getAllDaysInMonth = (month, year) => (new Array(31)).fill('').map((v,i)=>new Date(year,month-1,i+1)).filter(v=>v.getMonth()===month-1);
 
 const allLunarDaysInYear = (currentYear, latitude, longitude, timezone) => {
   var allYearDates = allDaysInYear(currentYear),
@@ -305,10 +215,23 @@ const allLunarDaysInYear = (currentYear, latitude, longitude, timezone) => {
     ;
 
   for (date of allYearDates){
-    lunarDates.push(date,lunarDays(moment.tz(date, 'DD-MM-YYYY', timezone), latitude, longitude));
+    //lunarDates.push(date,lunarDays(moment.tz(date, 'DD-MM-YYYY', timezone), latitude, longitude));
+    lunarDates.push(lunarDays(moment.tz(date, 'DD-MM-YYYY', timezone), latitude, longitude));
   }
 
   return lunarDates;
+}
+
+const allLunarDaysInMonth = (currentMonth, currentYear, latitude, longitude, timezone) => {
+      var allYearDates = getAllDaysInMonth(currentMonth,currentYear),
+      lunarDates = []
+    ;
+
+    for (date of allYearDates){
+    lunarDates.push(lunarDays(moment.tz(date, 'DD-MM-YYYY', timezone), latitude, longitude));
+    }
+
+    return lunarDates;
 }
 
 ///////// NEW /////////////////
@@ -321,10 +244,26 @@ const latitude =  47.7086074
 const longitude = 40.216038
 const day = '30-07-2021'
 const year = 2019
+const month = 2
 const timezone = 'Asia/Novosibirsk';
+
+//console.log("====== LUNAR DAYS FOR ONE DAY ========");
+//console.log(lunarDays(day, latitude, longitude, timezone));
+
+//console.log("====== LNAR DAYS FOR ENTIRE YEAR ========");
+//console.log(allLunarDaysInYear(year, latitude, longitude, timezone));
+
+/**
+ * @param {int} The month number, 0 based
+ * @param {int} The year, not zero based, required to account for leap years
+ * @return {Date[]} List with date objects for each day of the month
+ */
+ //console.log("====== LUNAR DAYS FOR ENTIRE MONTH ========");
+ //console.log(allLunarDaysInMonth(month, year, latitude, longitude, timezone));
 
 module.exports = lunarDays
 module.exports = allLunarDaysInYear
+module.exports = allLunarDaysInMonth
 
 
 
@@ -35848,6 +35787,11 @@ if (typeof global.window.define == 'function' && global.window.define.amd){
     global.window.define('allLunarDaysInYear', function() {return mylib})
 } else {
     global.window.allLunarDaysInYear = mylib
+}
+if (typeof global.window.define == 'function' && global.window.define.amd){
+    global.window.define('allLunarDaysInMonth', function() {return mylib})
+} else {
+    global.window.allLunarDaysInMonth = mylib
 }
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./index":1}],79:[function(require,module,exports){
